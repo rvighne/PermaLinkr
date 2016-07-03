@@ -3,7 +3,7 @@
 
 	"name": "PermaLinkr",
 	"description": "Share permalinks to specific sections (or fragments) of pages",
-	"version": "1.0.0",
+	"version": "1.1.0",
 
 	"permissions": [
 		"contextMenus",
@@ -27,6 +27,10 @@
 		"128": "icons/icon-128.png"
 	},
 
+	"web_accessible_resources": [
+		"icons/icon.svg"
+	],
+
 	"background": {
 		"scripts": ["scripts/background.js"]
 	},
@@ -34,7 +38,8 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*/*", "file:///*"],
-			"js": ["scripts/content.js"]
+			"js": ["scripts/content.js"],
+			"css": ["styles/content.css"]
 		}
 	]
 }

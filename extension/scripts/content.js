@@ -5,8 +5,7 @@ let lastEl = null;
 
 // TODO: style this to be fixed to top left to it doesn't flash/break CSS
 let copyHelper = document.createElement('textarea');
-copyHelper.classList.add('PermaLinkr');
-copyHelper.classList.add('copy-helper');
+copyHelper.classList.add('PermaLinkr-copy-helper');
 
 
 // TODO: Make this more efficient by walking up the DOM tree element by element, rather than regenerating a large HTMLCollection each time
@@ -57,6 +56,38 @@ function makeLink() {
 	}
 }
 
+function createLinkIcon(el, target) {
+	el.classList.add('PermaLinkr-heading');
+
+	let img = new Image;
+	img.src = chrome.extension.getURL('icons/icon.svg');
+	img.alt = "Permalink";
+	img.classList.add('PermaLinkr-heading-icon');
+
+	let link = document.createElement('a');
+	link.href = '#' + target;
+	link.title = "Permalink to this section";
+	link.classList.add('PermaLinkr-heading-link');
+
+	link.addEventListener('click', () => {
+		chrome.storage.sync.get('copyLinks', items => {
+			if (items.copyLinks) {
+				copyText(link.href);
+			}
+		});
+	});
+
+	link.appendChild(img);
+	el.appendChild(link);
+}
+
+function findFragments() {
+	let els = document.querySelectorAll("h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]");
+	for (let el of els) {
+		createLinkIcon(el, el.id);
+	}
+}
+
 document.addEventListener('contextmenu', e => {
 	lastEl = e.target;
 });
@@ -66,5 +97,7 @@ chrome.runtime.onMessage.addListener(message => {
 		makeLink();
 	}
 });
+
+findFragments();
 
 })();
