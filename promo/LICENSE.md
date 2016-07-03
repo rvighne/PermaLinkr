@@ -1,0 +1,1 @@
+The blue and orange PermaLinkr "link" icon is made by Freepik from [www.flaticon.com](http://www.flaticon.com) and is licensed under [CC-BY-SA](https://creativecommons.org/licenses/by/3.0/)
