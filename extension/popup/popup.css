@@ -1,0 +1,12 @@
+body {
+	white-space: nowrap;
+}
+
+header img {
+	float: right;
+}
+
+q {
+	/* Pretty quotes */
+	quotes: "\201C" "\201D";
+}
