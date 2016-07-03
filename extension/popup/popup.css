@@ -6,6 +6,11 @@ header img {
 	float: right;
 }
 
+#options-list {
+	list-style: none;
+	padding: 0;
+}
+
 q {
 	/* Pretty quotes */
 	quotes: "\201C" "\201D";

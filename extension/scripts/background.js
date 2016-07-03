@@ -2,12 +2,16 @@
 "use strict";
 
 // Set defaults
-chrome.storage.sync.get('copyLinks', items => {
+chrome.storage.sync.get(['copyLinks', 'headingLinks'], items => {
 	if (!('copyLinks' in items)) {
-		chrome.storage.sync.set({
-			copyLinks: true
-		});
+		items.copyLinks = true;
 	}
+
+	if (!('headingLinks' in items)) {
+		items.headingLinks = true;
+	}
+
+	chrome.storage.sync.set(items);
 });
 
 function requestLink(info, tab) {

@@ -3,10 +3,16 @@
 
 let lastEl = null;
 
-// TODO: style this to be fixed to top left to it doesn't flash/break CSS
 let copyHelper = document.createElement('textarea');
 copyHelper.classList.add('PermaLinkr-copy-helper');
 
+function ifOptionSet(option, func, ...args) {
+	chrome.storage.sync.get(option, items => {
+		if (items[option]) {
+			func(...args);
+		}
+	});
+}
 
 // TODO: Make this more efficient by walking up the DOM tree element by element, rather than regenerating a large HTMLCollection each time
 function* elementsAbove(el) {
@@ -47,18 +53,11 @@ function makeLink() {
 	let fragID = getFragID(lastEl);
 	if (fragID) {
 		location.hash = fragID;
-
-		chrome.storage.sync.get('copyLinks', items => {
-			if (items.copyLinks) {
-				copyText(location);
-			}
-		});
+		ifOptionSet('copyLinks', copyText, location);
 	}
 }
 
 function createLinkIcon(el, target) {
-	el.classList.add('PermaLinkr-heading');
-
 	let img = new Image;
 	img.src = chrome.extension.getURL('icons/icon.svg');
 	img.alt = "Permalink";
@@ -70,11 +69,7 @@ function createLinkIcon(el, target) {
 	link.classList.add('PermaLinkr-heading-link');
 
 	link.addEventListener('click', () => {
-		chrome.storage.sync.get('copyLinks', items => {
-			if (items.copyLinks) {
-				copyText(link.href);
-			}
-		});
+		ifOptionSet('copyLinks', copyText, link.href);
 	});
 
 	link.appendChild(img);
@@ -98,6 +93,6 @@ chrome.runtime.onMessage.addListener(message => {
 	}
 });
 
-findFragments();
+ifOptionSet('headingLinks', findFragments);
 
 })();

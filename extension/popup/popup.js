@@ -1,17 +1,31 @@
 (function () {
 "use strict";
 
-let copyToggle = document.getElementById('copy-toggle');
+// Load options from storage
+let optsList = document.getElementById('options-list');
+let optInputs = {};
 
-chrome.storage.sync.get('copyLinks', items => {
-	copyToggle.checked = items.copyLinks;
-	copyToggle.disabled = false;
+for (let input of optsList.querySelectorAll("input[type=checkbox]")) {
+	optInputs[input.name] = input;
+}
+
+chrome.storage.sync.get(Object.keys(optInputs), items => {
+	for (let name in items) {
+		let input = optInputs[name];
+		input.checked = items[name];
+		input.disabled = false;
+	}
 });
 
-copyToggle.addEventListener('change', function updateOptions() {
-	chrome.storage.sync.set({
-		copyLinks: this.checked
-	});
+// Listen for changes in the options and update storage accordingly
+optsList.addEventListener('change', e => {
+	let el = e.target;
+
+	if (el.type === "checkbox") {
+		chrome.storage.sync.set({
+			[el.name]: el.checked
+		});
+	}
 });
 
 })();
