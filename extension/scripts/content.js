@@ -2,6 +2,7 @@
 "use strict";
 
 let lastEl = null;
+let allEls = document.body.getElementsByTagName('*');
 
 let copyHelper = document.createElement('textarea');
 copyHelper.classList.add('PermaLinkr-copy-helper');
@@ -18,10 +19,8 @@ function ifOptionSet(option, func, ...args) {
 function* elementsAbove(el) {
 	yield el;
 
-	let allEls = document.body.getElementsByTagName('*');
-	let els = Array.prototype.slice.call(allEls, 0, Array.prototype.indexOf.call(allEls, el));
-
-	for (let i = els.length - 1; i >= 0; --i) {
+	let els = Array.from(allEls);
+	for (let i = els.indexOf(el) - 1; i >= 0; --i) {
 		yield els[i];
 	}
 }
